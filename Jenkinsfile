@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        COMPOSE_FILE = '/home/ubuntu/todo-app/docker-compose.yml'
-    }
-
     stages {
         stage('Clone Repository') {
             steps {
@@ -16,14 +12,14 @@ pipeline {
         stage('Stop Old Containers') {
             steps {
                 echo 'Stopping old containers...'
-                sh 'docker-compose -f ${COMPOSE_FILE} down || true'
+                sh 'docker-compose down || true'
             }
         }
 
         stage('Build and Start Containers') {
             steps {
-                echo 'Building and starting containers...'
-                sh 'docker-compose -f ${COMPOSE_FILE} up -d --build'
+                echo 'Building and starting all 3 tiers...'
+                sh 'docker-compose up -d --build'
             }
         }
 
