@@ -5,7 +5,6 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
         DOCKER_IMAGE_BACKEND  = 'ahmad081/todo-backend'
         DOCKER_IMAGE_FRONTEND = 'ahmad081/todo-frontend'
-        SONAR_PROJECT_KEY     = 'todo-app-mern'
     }
 
     stages {
@@ -53,8 +52,8 @@ pipeline {
             steps {
                 echo 'Pushing images to Docker Hub...'
                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                sh 'docker tag todo-app-mern-backend:latest ahmad081/todo-backend:latest'
-                sh 'docker tag todo-app-mern-frontend:latest ahmad081/todo-frontend:latest'
+                sh 'docker tag todo-app-pipeline_backend:latest ahmad081/todo-backend:latest'
+                sh 'docker tag todo-app-pipeline_frontend:latest ahmad081/todo-frontend:latest'
                 sh 'docker push ahmad081/todo-backend:latest'
                 sh 'docker push ahmad081/todo-frontend:latest'
             }
@@ -79,15 +78,9 @@ pipeline {
     post {
         success {
             echo '3-Tier Todo App Deployed Successfully!'
-            mail to: 'ahmadsilent25@gmail.com',
-                 subject: 'Build SUCCESS - Todo App',
-                 body: '3-Tier MERN Todo App successfully deployed on AWS EC2!'
         }
         failure {
             echo 'Deployment Failed!'
-            mail to: 'ahmadsilent25@gmail.com',
-                 subject: 'Build FAILED - Todo App',
-                 body: 'Something went wrong with the Todo App pipeline!'
         }
     }
 }
